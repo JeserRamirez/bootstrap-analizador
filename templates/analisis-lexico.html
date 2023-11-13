@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        #output {
+            white-space: pre-wrap;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            text-decoration: underline red;
+        }
+        .black {
+            color: black;
+        }
+    </style>
+    <title>Analizador Léxico</title>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div style="margin-left: 1em" class="nav-item active">
+                <a href="/" class="nav-link nav-item active navbar-brand">Automatas II</a>
+            </div>
+            <div class="nav-item active">
+                <a href="/" class="nav-link nav-item active navbar-brand">Analizador semántico</a>
+            </div>
+            <div class="nav-item active">
+                <a href="/analisis-sintactico.html" class="nav-link nav-item active navbar-brand">Analizador sintáctico</a>
+            </div>
+            <div class="nav-item active">
+                <a href="/analisis-lexico.html" class="nav-link nav-item active navbar-brand">Analizador Léxico</a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container">
+        <h1>Analizador Léxico</h1>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                <label for="input">Ingrese la expresión:</label>
+            </div>
+            <div class="col-md-6">
+                <textarea id="input" oninput="analizar()" rows="4" cols="50"></textarea>
+            </div>
+            <div class="col-md-4">
+                <label for="result">Resultado en tiempo real:</label>
+                <div id="result"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container row mt-3">
+        <div class="col-md-6">
+
+        </div>
+    </div>
+
+    <script>
+        function analizar() {
+            const inputTextArea = document.getElementById('input');
+            const resultParagraph = document.getElementById('result');
+            const inputText = inputTextArea.value;
+
+            let resultHTML = '';
+
+            for (let i = 0; i < inputText.length; i++) {
+                const currentChar = inputText[i];
+                const nextChar = inputText[i + 1];
+
+                const specialCases = ['--', '++', '*', '//', '- -', '+ +', ' *', '/ /'];
+
+                const currentPair = currentChar + (nextChar ? nextChar : '');
+
+                if (specialCases.includes(currentPair)) {
+                    resultHTML += '<span class="error">' + currentPair + '</span>';
+                    i++; // Skip the next character
+                } else if (/[0-9+\-*/]/.test(currentChar)) {
+                    resultHTML += '<span class="black">' + currentChar + '</span>';
+                } else {
+                    resultHTML += '<span class="error">' + currentChar + '</span>';
+                }
+            }
+
+            resultParagraph.innerHTML = resultHTML;
+        }
+    </script>
+
+</body>
+</html>

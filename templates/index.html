@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>Automatas II</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+</head>
+<style>
+    .nav-item{
+        margin: 0 0.3em;
+    }
+</style>
+<body>
+
+<div class="container">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div style="margin-left: 1em" class="nav-item active">
+            <a href="/" class="nav-link nav-item active navbar-brand">Automatas II</a>
+        </div>
+        <div class="nav-item active">
+            <a href="/" class="nav-link nav-item active navbar-brand">Analizador semántico</a>
+        </div>
+        <div class="nav-item active">
+            <a href="/analisis-sintactico.html" class="nav-link nav-item active navbar-brand">Analizador sintáctico</a>
+        </div>
+        <div class="nav-item active">
+            <a href="/analisis-lexico.html" class="nav-link nav-item active navbar-brand">Analizador Léxico</a>
+        </div>
+    </nav>
+</div>
+
+<div class="container">
+    <h1>Analizador Semántico</h1>
+</div>
+
+<div style="margin-top: 1em" class="container">
+    <form method="post">
+        <div class="row">
+            <div class="col-md-1">
+                <label for="entrada">Lenguaje</label>
+            </div>
+            <div class="col-md-3">
+                <input type="text" id="entrada" name="entrada" class="form-control">
+            </div>
+            <div class="col-md-4">
+                Debe ser con el siguiente formato ["",""]
+            </div>
+            <div class="col-md-2">
+                <button id="btnEnviar" class="btn btn-primary">Enviar</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+<!-- Display processed string -->
+{% if cadenaProcesada %}
+    <h2 style="color: red" class="text-center"><i>Cadena procesada: {{ cadenaProcesada }}</i></h2>
+{% endif %}
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+<script>
+    var btnEnviar = document.getElementById("btnEnviar")
+
+    function mandarMensaje(){
+        alert("MENSAJE ENVIADO");
+        console.log("holi");
+    }
+
+    btnEnviar.addEventListener("click", mandarMensaje);
+
+</script>
+</body>
+</html>
+
