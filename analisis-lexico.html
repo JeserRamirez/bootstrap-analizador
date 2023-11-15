@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
+    <style>
+        #output {
+            white-space: pre-wrap;
+        }
+        .error {
+            color: red;
+            font-weight: bold;
+            text-decoration: underline red;
+        }
+        .black {
+            color: black;
+        }
+    </style>
+    <title>Analizador Léxico</title>
+</head>
+<body>
+
+    <div class="container">
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div style="margin-left: 1em" class="nav-item active">
+                <a href="/" class="nav-link nav-item active navbar-brand">Automatas II</a>
+            </div>
+            <div class="nav-item active">
+                <a href="/" class="nav-link nav-item active navbar-brand">Analizador semántico</a>
+            </div>
+            <div class="nav-item active">
+                <a href="/analisis-sintactico.html" class="nav-link nav-item active navbar-brand">Analizador sintáctico</a>
+            </div>
+            <div class="nav-item active">
+                <a href="/analisis-lexico.html" class="nav-link nav-item active navbar-brand">Analizador Léxico</a>
+            </div>
+        </nav>
+    </div>
+
+    <div class="container">
+        <h1>Analizador Léxico</h1>
+    </div>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-md-2">
+                <label for="input">Ingrese la expresión:</label>
+            </div>
+            <div class="col-md-6">
+                <textarea id="input" oninput="analizar_lexico()" rows="4" cols="50"></textarea>
+            </div>
+            <div class="col-md-4">
+                <label for="result">Resultado en tiempo real:</label>
+                <div id="result"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function analizar_lexico() {
+            const inputTextArea = document.getElementById('input');
+            const resultParagraph = document.getElementById('result');
+            const inputText = inputTextArea.value;
+
+            // Realizar una solicitud al backend para el análisis léxico
+            fetch('/analizar_lexico', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ inputText }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                const tokens = data.result;
+
+                // Crear una nueva cadena con el formato deseado
+                let formattedText = '';
+                let currentToken = '';
+
+                // Función para agregar el token actual al resultado con la clase correspondiente
+                const addTokenToResult = () => {
+                    if (currentToken) {
+                        const isTokenCorrect = tokens.includes(currentToken);
+                        const tokenClass = isTokenCorrect ? 'black' : 'error';
+                        formattedText += `<span class="${tokenClass}">${currentToken}</span>`;
+                        currentToken = '';
+                    }
+                };
+
+                for (let i = 0; i < inputText.length; i++) {
+                    const currentChar = inputText[i];
+                    const isToken = tokens.includes(currentChar);
+
+                    if (isToken) {
+                        currentToken += currentChar;
+                    } else {
+                        addTokenToResult();
+                        formattedText += `<span class="error">${currentChar}</span>`;
+                    }
+                }
+
+                // Agregar el último token al resultado
+                addTokenToResult();
+
+                // Mostrar la cadena formateada en el resultado
+                resultParagraph.innerHTML = formattedText;
+            })
+        }
+    </script>
+
+    </body>
+</html>

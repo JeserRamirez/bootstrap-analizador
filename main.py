@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from ply import lex
 
 app = Flask(__name__)
@@ -39,12 +39,21 @@ def t_error(t):
 
 analizadorLexico = lex.lex()
 
-def analizarLexico():
-    codigoFuente = "2 mas 2"
-    analizadorLexico.input(codigoFuente)
 
+@app.route("/analizar_lexico", methods=["POST"])
+def analizar_lexico():
+    entrada = request.get_json().get('inputText', '')
+
+    # Configura el analizador léxico
+    analizadorLexico.input(entrada)
+
+    # Realiza el análisis léxico y devuelve los resultados
+    resultados = []
     for token in analizadorLexico:
-        print(token)
+        resultados.append(str(token))
+
+    return jsonify({'result': '<br>'.join(resultados)})
+
 
 @app.route("/", methods=["GET", "POST"])
 def homepage():
@@ -61,9 +70,24 @@ def analisis_sintactico():
 
     return render_template("analisis-sintactico.html")
 
-@app.route("/analisis-lexico.html", methods=["GET","POST"])
+
+@app.route("/analisis-lexico.html", methods=["GET", "POST"])
 def analisis_lexico():
+    if request.method == "POST":
+        entrada = request.get_json().get('inputText', '')
+
+        # Configura el analizador léxico
+        analizadorLexico.input(entrada)
+
+        # Realiza el análisis léxico y devuelve los resultados
+        resultados = []
+        for token in analizadorLexico:
+            resultados.append(str(token))
+
+        return jsonify({'result': '<br>'.join(resultados)})
+
     return render_template("analisis-lexico.html")
+
 
 if __name__ == "__main__":
     app.run(debug=True)
